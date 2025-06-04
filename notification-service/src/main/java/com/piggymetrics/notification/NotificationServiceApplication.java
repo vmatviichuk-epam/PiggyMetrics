@@ -17,8 +17,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 import com.piggymetrics.notification.repository.converter.FrequencyReaderConverter;
 import com.piggymetrics.notification.repository.converter.FrequencyWriterConverter;
@@ -27,8 +25,6 @@ import feign.RequestInterceptor;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableResourceServer
-@EnableOAuth2Client
 @EnableFeignClients
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableConfigurationProperties

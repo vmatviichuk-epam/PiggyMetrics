@@ -16,12 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
-
-import com.piggymetrics.account.service.security.CustomUserInfoTokenServices;
 
 import feign.RequestInterceptor;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -33,9 +28,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
-@EnableResourceServer
 @EnableDiscoveryClient
-@EnableOAuth2Client
 @EnableFeignClients
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableConfigurationProperties
@@ -64,11 +57,6 @@ public class AccountApplication extends ResourceServerConfigurerAdapter {
 	@Bean
 	public OAuth2RestTemplate clientCredentialsRestTemplate() {
 		return new OAuth2RestTemplate(clientCredentialsResourceDetails());
-	}
-
-	@Bean
-	public ResourceServerTokenServices tokenServices() {
-		return new CustomUserInfoTokenServices(sso.getUserInfoUri(), sso.getClientId());
 	}
 
 	@Override
