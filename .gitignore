@@ -9,3 +9,13 @@
 # Maven
 log/
 target/
+
+.project
+.vscode/
+
+.classpath
+
+.settings/
+
+.*
+!*/

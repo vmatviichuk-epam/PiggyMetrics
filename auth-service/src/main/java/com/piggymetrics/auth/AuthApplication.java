@@ -18,7 +18,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -28,7 +27,6 @@ import com.piggymetrics.auth.service.security.MongoUserDetailsService;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthApplication {
 
@@ -38,26 +36,27 @@ public class AuthApplication {
 
 	@Configuration
 	@EnableWebSecurity
-	protected static class webSecurityConfig extends WebSecurityConfigurerAdapter {
+	protected static class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		@Autowired
-		private MongoUserDetailsService userDetailsService;
+		private com.piggymetrics.auth.service.security.MongoUserDetailsService userDetailsService;
 
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			// @formatter:off
 			http
+				.cors().and()
+				.csrf().disable()
+				.sessionManagement().sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.STATELESS)
+				.and()
 				.authorizeRequests()
-				.anyRequest().authenticated()
-			.and()
-				.csrf().disable();
-			// @formatter:on
+				.antMatchers("/auth/**", "/actuator/**").permitAll()
+				.anyRequest().authenticated();
 		}
 
 		@Override
 		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 			auth.userDetailsService(userDetailsService)
-					.passwordEncoder(new BCryptPasswordEncoder());
+				.passwordEncoder(new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder());
 		}
 
 		@Override
